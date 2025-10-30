@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import PeopleIcon from "@mui/icons-material/People";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import AttendeeCard from "./attendee-card";
 import viewEvent from "../../services/event/applications/view-event.service";
 import indexEventAttendees from "../../services/event/applications/index-event-attendees.service";
 
@@ -68,13 +68,7 @@ export default function ViewEvent() {
         <ul>
           {indexEventAttendeesData.attendees.map((attendee) => (
             <li key={`attendee-${attendee.id}`}>
-              <article className="px-3.5 py-2.5 border border-neutral-200 rounded-md shadow flex flex-col gap-1">
-                <h4 className="text-sm font-semibold">{attendee.name}</h4>
-                <p className="text-neutral-600 text-sm flex items-center gap-1">
-                  <MailOutlineIcon fontSize="small" />
-                  <span className="font-semibold">{attendee.email}</span>
-                </p>
-              </article>
+              <AttendeeCard attendee={attendee} />
             </li>
           ))}
         </ul>
