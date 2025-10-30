@@ -8,7 +8,7 @@ export default function EventCard({ event }: TProps) {
   return (
     <article className="h-full px-6 py-5 border border-neutral-200 rounded-xl shadow transition-shadow flex flex-col hover:shadow-md">
       <h3 className="text-xl font-semibold mb-2">{event.title}</h3>
-      <p className="text-neutral-600 mb-5">{event.details}</p>
+      <p className="text-neutral-600 line-clamp-3 mb-5">{event.details}</p>
       <div className="flex flex-wrap items-center justify-between gap-3 mt-auto">
         <p className="text-sm flex items-center gap-2">
           <PeopleIcon fontSize="small" className="text-neutral-600" />
