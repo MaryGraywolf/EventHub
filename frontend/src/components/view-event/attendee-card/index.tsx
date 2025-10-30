@@ -13,7 +13,9 @@ export default function AttendeeCard({ attendee }: TProps) {
       </h4>
       <p className="flex items-center gap-2">
         <MailOutlineIcon fontSize="small" />
-        <span>{attendee.email}</span>
+        <a href={`mailto:${attendee.email}`} className="hover:underline">
+          {attendee.email}
+        </a>
       </p>
     </article>
   );
