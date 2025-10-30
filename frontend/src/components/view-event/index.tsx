@@ -49,15 +49,13 @@ export default function ViewEvent() {
       <h2 className="text-3xl font-semibold mb-6">
         {viewEventData.event.title}
       </h2>
-      <div className="flex items-start gap-4">
-        <div className="flex flex-col gap-4">
-          <DetailsInfoCard event={viewEventData.event} />
-          <AttendeesInfoCard
-            event={viewEventData.event}
-            attendees={indexEventAttendeesData.attendees}
-          />
-        </div>
+      <div className="grid items-start gap-4 md:grid-cols-[2fr_1fr]">
+        <DetailsInfoCard event={viewEventData.event} />
         <RegisterInfoCard eventId={id} />
+        <AttendeesInfoCard
+          event={viewEventData.event}
+          attendees={indexEventAttendeesData.attendees}
+        />
       </div>
     </>
   );
