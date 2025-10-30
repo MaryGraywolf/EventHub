@@ -21,6 +21,7 @@ export default function CreateEvent() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<TCreateEventSchema>({ resolver: zodResolver(createEventSchema) });
 
@@ -28,6 +29,7 @@ export default function CreateEvent() {
     mutationFn: storeEvent,
     onSuccess: () => {
       toast.success("Evento criado com sucesso.");
+      reset();
       navigate("/");
     },
     onError: (error: any) => {
