@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import Button from "../button";
 import storeEvent from "../../services/event/applications/store-event.service";
 import {
   createEventSchema,
@@ -98,19 +99,12 @@ export default function CreateEvent() {
         )}
       </div>
       <div className="flex gap-4">
-        <Link
-          to="/"
-          className="text-sm font-semibold text-center min-h-8 px-2.5 py-1.5 border border-neutral-200 rounded-lg flex items-center justify-center hover:bg-neutral-100"
-        >
-          Cancelar
+        <Link to="/">
+          <Button color="secondary">Cancelar</Button>
         </Link>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="text-white text-sm font-semibold text-center bg-black w-full min-h-8 px-2.5 py-1.5 rounded-lg flex items-center justify-center hover:cursor-pointer hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50"
-        >
+        <Button type="submit" disabled={isLoading}>
           {isLoading ? "Criando..." : "Criar evento"}
-        </button>
+        </Button>
       </div>
     </form>
   );
