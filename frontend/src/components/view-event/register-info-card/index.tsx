@@ -27,14 +27,22 @@ export default function RegisterInfoCard({ eventId }: TProps) {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: TRegisterAttendeeSchema) => storeEventAttendee({ eventId, ...data }),
+    mutationFn: (data: TRegisterAttendeeSchema) =>
+      storeEventAttendee({ eventId, ...data }),
     onSuccess: () => {
       toast.success("Inscrição realizada com sucesso!");
       reset();
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Erro ao se inscrever:", error);
-      toast.error("Erro ao se inscrever no evento. Por favor, tente novamente.");
+
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(
+          "Erro ao se inscrever no evento. Por favor, tente novamente.",
+        );
+      }
     },
   });
 
@@ -46,7 +54,10 @@ export default function RegisterInfoCard({ eventId }: TProps) {
 
   return (
     <InfoCard title="Inscreva-se agora">
-      <form onSubmit={handleSubmit(onSubmit)} className="min-w-64 flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="min-w-64 flex flex-col gap-4"
+      >
         <FieldGroup>
           <Label htmlFor="name" label="Nome completo" required />
           <Input
@@ -55,7 +66,9 @@ export default function RegisterInfoCard({ eventId }: TProps) {
             placeholder="Ex.: John Doe"
             disabled={isLoading}
           />
-          {errors.name?.message && <ErrorMessage message={errors.name.message} />}
+          {errors.name?.message && (
+            <ErrorMessage message={errors.name.message} />
+          )}
         </FieldGroup>
         <FieldGroup>
           <Label htmlFor="email" label="E-mail" required />
@@ -66,7 +79,9 @@ export default function RegisterInfoCard({ eventId }: TProps) {
             placeholder="Ex.: john.doe@example.com"
             disabled={isLoading}
           />
-          {errors.email?.message && <ErrorMessage message={errors.email.message} />}
+          {errors.email?.message && (
+            <ErrorMessage message={errors.email.message} />
+          )}
         </FieldGroup>
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "Inscrevendo..." : "Inscrever-se"}

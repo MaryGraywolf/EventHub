@@ -30,9 +30,14 @@ export default function CreateEvent() {
       toast.success("Evento criado com sucesso.");
       navigate("/");
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Erro ao criar evento:", error);
-      toast.error("Erro ao criar evento. Por favor, tente novamente.");
+
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Erro ao criar evento. Por favor, tente novamente.");
+      }
     },
   });
 
