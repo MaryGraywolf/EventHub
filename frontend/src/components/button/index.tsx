@@ -23,6 +23,6 @@ type TProps = TButtonProps & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function Button({ className, color, ...props }: TProps) {
   return (
-    <button className={cn(className, buttonVariants({ color }))} {...props} />
+    <button className={cn(buttonVariants({ color }), className)} {...props} />
   );
 }
