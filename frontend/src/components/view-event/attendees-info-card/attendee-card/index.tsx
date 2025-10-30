@@ -1,6 +1,6 @@
 import PersonIcon from "@mui/icons-material/Person";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import type { TAttendee } from "../../../services/event/entities/attendee.type";
+import type { TAttendee } from "../../../../services/event/entities/attendee.type";
 
 type TProps = { attendee: TAttendee };
 
