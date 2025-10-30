@@ -1,10 +1,10 @@
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import PeopleIcon from "@mui/icons-material/People";
-import AttendeeCard from "./attendee-card";
 import viewEvent from "../../services/event/applications/view-event.service";
 import indexEventAttendees from "../../services/event/applications/index-event-attendees.service";
-import type { TAttendee } from "../../services/event/entities/attendee.type";
+import DetailsInfoCard from "./details-info-card";
+import AttendeesInfoCard from "./attendees-info-card";
+import RegisterInfoCard from "./register-info-card";
 
 export default function ViewEvent() {
   const { id } = useParams();
@@ -35,6 +35,7 @@ export default function ViewEvent() {
   });
 
   if (
+    !id ||
     isViewEventLoading ||
     !viewEventData ||
     isIndexEventAttendeesLoading ||
@@ -43,49 +44,21 @@ export default function ViewEvent() {
     return <p>Carregando...</p>;
   }
 
-  function renderAttendees(attendees: TAttendee[]) {
-    if (attendees.length === 0) {
-      return (
-        <li>
-          <p className="text-neutral-600 text-sm">
-            Nenhum participante registrado
-          </p>
-        </li>
-      );
-    }
-
-    return attendees.map((attendee) => (
-      <li key={`attendee-${attendee.id}`}>
-        <AttendeeCard attendee={attendee} />
-      </li>
-    ));
-  }
-
   return (
-    <div className="px-6 py-5 border border-neutral-200 rounded-xl shadow flex flex-col gap-6">
-      <div>
-        <h2 className="text-neutral-600 text-sm font-semibold mb-2">
-          Detalhes do evento
-        </h2>
-        <h3 className="text-xl font-semibold mb-2">
-          {viewEventData.event.title}
-        </h3>
-        <p className="text-neutral-600 mb-5">{viewEventData.event.details}</p>
-        <p className="text-sm flex items-center gap-2">
-          <PeopleIcon fontSize="small" className="text-neutral-600" />
-          <span>
-            {viewEventData.event.attendeesAmount}/
-            {viewEventData.event.maximunAttendees} registrados
-          </span>
-        </p>
+    <>
+      <h2 className="text-3xl font-semibold mb-6">
+        {viewEventData.event.title}
+      </h2>
+      <div className="flex items-start gap-4">
+        <div className="flex flex-col gap-4">
+          <DetailsInfoCard event={viewEventData.event} />
+          <AttendeesInfoCard
+            event={viewEventData.event}
+            attendees={indexEventAttendeesData.attendees}
+          />
+        </div>
+        <RegisterInfoCard eventId={id} />
       </div>
-      <hr className="border-none h-px bg-neutral-200" />
-      <div>
-        <h2 className="text-neutral-600 text-sm font-semibold mb-2">
-          Participantes do evento
-        </h2>
-        <ul>{renderAttendees(indexEventAttendeesData.attendees)}</ul>
-      </div>
-    </div>
+    </>
   );
 }
