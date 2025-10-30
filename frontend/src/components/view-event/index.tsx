@@ -50,7 +50,7 @@ export default function ViewEvent() {
         {viewEventData.event.title}
       </h2>
       <div className="grid items-start gap-4 md:grid-cols-[2fr_1fr]">
-        <DetailsInfoCard event={viewEventData.event} />
+        <DetailsInfoCard event={viewEventData.event} className="self-stretch" />
         <RegisterInfoCard eventId={id} />
         <AttendeesInfoCard
           event={viewEventData.event}
