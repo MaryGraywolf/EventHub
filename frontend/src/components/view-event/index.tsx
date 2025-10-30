@@ -4,6 +4,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import AttendeeCard from "./attendee-card";
 import viewEvent from "../../services/event/applications/view-event.service";
 import indexEventAttendees from "../../services/event/applications/index-event-attendees.service";
+import type { TAttendee } from "../../services/event/entities/attendee.type";
 
 export default function ViewEvent() {
   const { id } = useParams();
@@ -42,6 +43,24 @@ export default function ViewEvent() {
     return <p>Carregando...</p>;
   }
 
+  function renderAttendees(attendees: TAttendee[]) {
+    if (attendees.length === 0) {
+      return (
+        <li>
+          <p className="text-neutral-600 text-sm">
+            Nenhum participante registrado
+          </p>
+        </li>
+      );
+    }
+
+    return attendees.map((attendee) => (
+      <li key={`attendee-${attendee.id}`}>
+        <AttendeeCard attendee={attendee} />
+      </li>
+    ));
+  }
+
   return (
     <div className="px-6 py-5 border border-neutral-200 rounded-xl shadow flex flex-col gap-6">
       <div>
@@ -65,13 +84,7 @@ export default function ViewEvent() {
         <h2 className="text-neutral-600 text-sm font-semibold mb-2">
           Participantes do evento
         </h2>
-        <ul>
-          {indexEventAttendeesData.attendees.map((attendee) => (
-            <li key={`attendee-${attendee.id}`}>
-              <AttendeeCard attendee={attendee} />
-            </li>
-          ))}
-        </ul>
+        <ul>{renderAttendees(indexEventAttendeesData.attendees)}</ul>
       </div>
     </div>
   );
