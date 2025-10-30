@@ -26,11 +26,6 @@ export default function Header() {
 
         <ul className="flex items-center gap-2">
           <li>
-            <NavLink to="/admin/dashboard">
-              <Button color="transparent">Admin</Button>
-            </NavLink>
-          </li>
-          <li>
             <NavLink to="/events/create">
               <Button>Criar evento</Button>
             </NavLink>
