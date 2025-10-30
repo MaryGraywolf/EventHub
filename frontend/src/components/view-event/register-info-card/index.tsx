@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import InfoCard from "../info-card";
 import Label from "../../form/label";
@@ -26,12 +26,20 @@ export default function RegisterInfoCard({ eventId }: TProps) {
     resolver: zodResolver(registerAttendeeSchema),
   });
 
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: (data: TRegisterAttendeeSchema) =>
       storeEventAttendee({ eventId, ...data }),
     onSuccess: () => {
       toast.success("Inscrição realizada com sucesso!");
       reset();
+
+      queryClient.invalidateQueries({
+        queryKey: ["index-event-attendees", eventId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["view-event", eventId],
+      });
     },
     onError: (error: any) => {
       console.error("Erro ao se inscrever:", error);
