@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import indexEvents from "../../services/event/applications/index-events.service";
 import EventCard from "./event-card";
+import type { TEvent } from "../../services/event/entities/event.type";
 
 export default function Events() {
   const { isLoading, data } = useQuery({
@@ -12,13 +13,25 @@ export default function Events() {
     return <p>Carregando...</p>;
   }
 
+  function renderEvents(events: TEvent[]) {
+    if (events.length === 0) {
+      return (
+        <li>
+          <p className="text-neutral-600">Nenhum evento encontrado</p>
+        </li>
+      );
+    }
+
+    return events.map((event) => (
+      <li key={event.id}>
+        <EventCard event={event} />
+      </li>
+    ));
+  }
+
   return (
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {data.events.map((event) => (
-        <li key={event.id}>
-          <EventCard event={event} />
-        </li>
-      ))}
+      {renderEvents(data.events)}
     </ul>
   );
 }
