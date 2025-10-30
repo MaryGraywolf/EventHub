@@ -3,6 +3,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import Label from "../form/label";
+import Input from "../form/input";
+import TextArea from "../form/text-area";
+import ErrorMessage from "../form/error-message";
+import FieldGroup from "../form/field-group";
 import Button from "../button";
 import storeEvent from "../../services/event/applications/store-event.service";
 import {
@@ -43,61 +48,50 @@ export default function CreateEvent() {
       className="px-6 py-5 border border-neutral-200 rounded-xl shadow flex flex-col gap-4"
     >
       <h2 className="text-2xl font-semibold">Criar novo evento</h2>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="title" className="text-sm font-semibold">
-          Título <span className="text-red-600">*</span>
-        </label>
-        <input
+      <FieldGroup>
+        <Label htmlFor="title" label="Título" required />
+        <Input
           {...register("title")}
           id="title"
           placeholder="Ex.: NLW Connect"
-          className="text-sm w-full px-3 py-1.5 rounded-md border border-neutral-200"
           disabled={isLoading}
         />
-        {errors.title && (
-          <span className="text-xs font-semibold text-red-600">
-            {errors.title.message}
-          </span>
+        {errors.title?.message && (
+          <ErrorMessage message={errors.title.message} />
         )}
-      </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="details" className="text-sm font-semibold">
-          Detalhes <span className="text-red-600">*</span>
-        </label>
-        <textarea
+      </FieldGroup>
+      <FieldGroup>
+        <Label htmlFor="details" label="Detalhes" required />
+        <TextArea
           {...register("details")}
           id="details"
           rows={4}
           placeholder="Ex.: Crie um projeto em apenas três aulas gratuitas: nessa edição vamos codar o DevStage."
-          className="text-sm w-full px-3 py-1.5 rounded-md border border-neutral-200"
           disabled={isLoading}
-        ></textarea>
-        {errors.details && (
-          <span className="text-xs font-semibold text-red-600">
-            {errors.details.message}
-          </span>
+        ></TextArea>
+        {errors.details?.message && (
+          <ErrorMessage message={errors.details.message} />
         )}
-      </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="maximunAttendees" className="text-sm font-semibold">
-          Máximo de participantes <span className="text-red-600">*</span>
-        </label>
-        <input
+      </FieldGroup>
+      <FieldGroup>
+        <Label
+          htmlFor="maximunAttendees"
+          label="Máximo de participantes"
+          required
+        />
+        <Input
           {...register("maximunAttendees", { valueAsNumber: true })}
           type="number"
           id="maximunAttendees"
           min={1}
           step={1}
           placeholder="Ex.: 100"
-          className="text-sm w-full px-3 py-1.5 rounded-md border border-neutral-200"
           disabled={isLoading}
         />
-        {errors.maximunAttendees && (
-          <span className="text-xs font-semibold text-red-600">
-            {errors.maximunAttendees.message}
-          </span>
+        {errors.maximunAttendees?.message && (
+          <ErrorMessage message={errors.maximunAttendees.message} />
         )}
-      </div>
+      </FieldGroup>
       <div className="flex gap-4">
         <Link to="/">
           <Button color="secondary">Cancelar</Button>
