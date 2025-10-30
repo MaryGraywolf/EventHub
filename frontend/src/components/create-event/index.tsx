@@ -12,7 +12,7 @@ import Button from "../button";
 import storeEvent from "../../services/event/applications/store-event.service";
 import {
   createEventSchema,
-  type TCreateEventForm,
+  type TCreateEventSchema,
 } from "../../schemas/event/create-event.schema";
 
 export default function CreateEvent() {
@@ -22,7 +22,7 @@ export default function CreateEvent() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<TCreateEventForm>({ resolver: zodResolver(createEventSchema) });
+  } = useForm<TCreateEventSchema>({ resolver: zodResolver(createEventSchema) });
 
   const { mutate, isPending } = useMutation({
     mutationFn: storeEvent,
@@ -36,7 +36,7 @@ export default function CreateEvent() {
     },
   });
 
-  const onSubmit = (data: TCreateEventForm) => {
+  const onSubmit = (data: TCreateEventSchema) => {
     mutate(data);
   };
 
