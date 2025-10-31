@@ -30,8 +30,8 @@ Isso irá construir as imagens Docker e iniciar os serviços do backend, fronten
 
 ## Acesso
 
-- O frontend estará disponível em `http://localhost:3000`.
-- O backend estará disponível em `http://localhost:2424`.
+- O frontend estará disponível em `http://localhost:4173`.
+- O backend estará disponível em `http://localhost:3000`.
 - O banco de dados pode ser acessado conforme configurado no arquivo `.env`.
 
 ## Contribuição
