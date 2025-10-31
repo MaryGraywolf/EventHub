@@ -5,7 +5,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build artifacts (these are rebuilt in container)
-dist
+frontend/dist
+backend/dist
 build
 
 # Environment files

@@ -1,38 +1,6 @@
-# docker-multi-service-project
+# eventHub
 
 Este projeto é uma aplicação multi-serviço que utiliza Docker para orquestrar um backend, um frontend e um banco de dados. Abaixo estão as instruções para configurar e executar o projeto.
-
-## Estrutura do Projeto
-
-```
-docker-multi-service-project
-├── backend          # Código do backend da aplicação
-│   ├── Dockerfile   # Instruções para construir a imagem Docker do backend
-│   ├── package.json # Manifesto do projeto backend
-│   ├── package-lock.json # Registra as versões exatas das dependências
-│   ├── tsconfig.json # Configurações do TypeScript
-│   ├── src          # Código fonte do backend
-│   │   ├── server.ts # Ponto de entrada da aplicação backend
-│   │   ├── controllers # Lógica de controle da aplicação
-│   │   └── routes    # Definição das rotas da aplicação
-│   └── prisma       # Esquema do banco de dados utilizado pelo Prisma
-│       └── schema.prisma
-├── frontend         # Código do frontend da aplicação
-│   ├── Dockerfile   # Instruções para construir a imagem Docker do frontend
-│   ├── package.json # Manifesto do projeto frontend
-│   ├── package-lock.json # Registra as versões exatas das dependências
-│   ├── public       # Arquivos públicos do frontend
-│   │   └── index.html # HTML principal da aplicação frontend
-│   └── src          # Código fonte do frontend
-│       └── main.tsx # Ponto de entrada da aplicação frontend
-├── db              # Configuração do banco de dados
-│   ├── Dockerfile   # Instruções para construir a imagem Docker do banco de dados
-│   └── init         # Scripts de inicialização do banco de dados
-│       └── init.sql # Scripts SQL para inicializar o banco de dados
-├── docker-compose.yml # Orquestração dos serviços
-├── .env            # Variáveis de ambiente
-└── README.md       # Documentação do projeto
-```
 
 ## Pré-requisitos
 
@@ -42,9 +10,10 @@ docker-multi-service-project
 ## Instalação
 
 1. Clone este repositório:
+
    ```
    git clone <URL_DO_REPOSITORIO>
-   cd docker-multi-service-project
+   cd eventhub
    ```
 
 2. Crie um arquivo `.env` na raiz do projeto e adicione suas variáveis de ambiente.
