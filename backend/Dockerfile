@@ -4,7 +4,7 @@ FROM base AS dependencies
 
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json ./
+COPY backend/package.json backend/package-lock.json ./
 
 RUN npm i
 
@@ -12,7 +12,7 @@ FROM dependencies AS build
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY backend/. .
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 
 RUN npm run build
@@ -31,6 +31,6 @@ COPY --from=build /usr/src/app/prisma ./prisma
 
 RUN npx prisma generate
 
-EXPOSE 3000
+EXPOSE ${BACKEND_PORT:-3000}
 
 CMD ["npm", "start"]
