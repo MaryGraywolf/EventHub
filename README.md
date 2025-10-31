@@ -30,7 +30,6 @@ A aplicação é composta por três containers Docker que se comunicam através 
 
 ### Infraestrutura
 - Docker & Docker Compose
-- PostgreSQL 15
 
 ## Pré-requisitos
 
