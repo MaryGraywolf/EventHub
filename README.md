@@ -1,43 +1,74 @@
-# eventHub
+# EventHub
 
-Este projeto é uma aplicação multi-serviço que utiliza Docker para orquestrar um backend, um frontend e um banco de dados. Abaixo estão as instruções para configurar e executar o projeto.
+Aplicação web para gerenciamento de eventos, desenvolvida com arquitetura de microsserviços utilizando Docker.
+
+## Arquitetura
+
+![Diagrama de Arquitetura](./assets/diagram.png)
+
+A aplicação é composta por três containers Docker que se comunicam através de uma rede interna:
+- **Frontend Container**: Interface do usuário (Vite + React) na porta 4173
+- **Backend Container**: API REST (Node.js + Fastify) na porta 3000
+- **DB Container**: Banco de dados PostgreSQL na porta 5432 com volume persistente
+
+## Tecnologias
+
+### Backend
+- Node.js 20+
+- Fastify
+- Prisma ORM
+- PostgreSQL 15
+- TypeScript
+
+### Frontend
+- React 19
+- Vite
+- Material-UI
+- TailwindCSS
+- React Router
+- TypeScript
+
+### Infraestrutura
+- Docker & Docker Compose
+- PostgreSQL 15
 
 ## Pré-requisitos
 
-- Docker e Docker Compose instalados na sua máquina.
-- Node.js e npm instalados para desenvolvimento local.
+- [Docker](https://docs.docker.com/get-docker/) e [Docker Compose](https://docs.docker.com/compose/install/) instalados
 
-## Instalação
+## Como Executar
 
-1. Clone este repositório:
-
-   ```
+1. Clone o repositório:
+   ```bash
    git clone <URL_DO_REPOSITORIO>
-   cd eventhub
+   cd EventHub
    ```
 
-2. Crie um arquivo `.env` na raiz do projeto e adicione suas variáveis de ambiente.
+2. Configure as variáveis de ambiente:
+   ```bash
+   cp .env.example .env
+   ```
 
-## Execução
+3. Inicie a aplicação:
+   ```bash
+   docker compose up --build
+   ```
 
-Para iniciar todos os serviços, execute o seguinte comando na raiz do projeto:
+4. Acesse a aplicação:
+   - **Frontend**: http://localhost:4173
+   - **Backend**: http://localhost:3000
+   - **API Docs**: http://localhost:3000/docs
+
+## Estrutura
 
 ```
-docker-compose up --build
+EventHub/
+├── backend/          # API REST com Fastify + Prisma
+├── frontend/         # Interface React + Vite
+├── docker-compose.yml
+└── .env
 ```
-
-Isso irá construir as imagens Docker e iniciar os serviços do backend, frontend e banco de dados.
-
-## Acesso
-
-- O frontend estará disponível em `http://localhost:4173`.
-- O backend estará disponível em `http://localhost:3000`.
-- O banco de dados pode ser acessado conforme configurado no arquivo `.env`.
-
-## Contribuição
-
-Sinta-se à vontade para contribuir com melhorias ou correções. Faça um fork do repositório e envie um pull request.
 
 ## Licença
 
-Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais detalhes.
+MIT License

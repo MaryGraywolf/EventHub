@@ -4,7 +4,7 @@ FROM base AS dependencies
 
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 
 RUN npm i
 
@@ -12,7 +12,9 @@ FROM dependencies AS build
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY .env ./
+
+COPY frontend/. .
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 
 RUN npm run build

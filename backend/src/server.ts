@@ -23,7 +23,7 @@ import {
 
 const app = fastify()
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000
+const PORT = process.env.BACKEND_PORT ? parseInt(process.env.BACKEND_PORT, 10) : 3000
 
 // Middleware para capturar métricas HTTP automaticamente
 app.addHook("onRequest", async (request, reply) => {
