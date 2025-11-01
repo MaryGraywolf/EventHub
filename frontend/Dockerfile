@@ -1,13 +1,16 @@
+# Base stage
 FROM node:22 AS base
 
+# Dependencies stage
 FROM base AS dependencies
 
 WORKDIR /usr/src/app
 
 COPY frontend/package.json frontend/package-lock.json ./
 
-RUN npm i
+RUN npm install
 
+# Build stage
 FROM dependencies AS build
 
 WORKDIR /usr/src/app
@@ -15,12 +18,11 @@ WORKDIR /usr/src/app
 COPY .env ./
 
 COPY frontend/. .
-COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 
 RUN npm run build
-RUN npm prune --prod
 
-FROM node:22 AS deploy
+# Deploy stage
+FROM base AS deploy
 
 WORKDIR /usr/src/app
 

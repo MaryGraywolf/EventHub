@@ -1,28 +1,30 @@
-FROM node:20 AS base
+# Base stage
+FROM node:22 AS base
 
+# Dependencies stage
 FROM base AS dependencies
 
 WORKDIR /usr/src/app
 
 COPY backend/package.json backend/package-lock.json ./
 
-RUN npm i
+RUN npm install
 
+# Build stage
 FROM dependencies AS build
 
 WORKDIR /usr/src/app
 
 COPY backend/. .
-COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 
 RUN npm run build
-RUN npm prune --prod
 
-FROM node:20-alpine3.19 AS deploy
+# Deploy stage
+FROM base AS deploy
 
 WORKDIR /usr/src/app
 
-RUN npm i -g prisma
+RUN npm install -g prisma
 
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
