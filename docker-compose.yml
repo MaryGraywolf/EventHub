@@ -3,11 +3,14 @@ services:
     container_name: db
     image: postgres:15
     ports:
-      - ${DB_PORT:-5432}:5432
+      - ${DB_PORT:-5432}:${DB_PORT:-5432}
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${DB_USER:-postgres}
       - POSTGRES_PASSWORD=${DB_PASS:-postgres}
       - POSTGRES_DB=${DB_NAME:-app}
+      - PGPORT=${DB_PORT:-5432}
     healthcheck:
       test:
         ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-app}"]
@@ -16,14 +19,12 @@ services:
       retries: 3
       start_period: 40s
     restart: unless-stopped
-    env_file:
-      - .env
     volumes:
       - db_data:/var/lib/postgresql/data
 
   backend:
     container_name: backend
-    image: backend-event-hub:${TAG_BACKEND}
+    image: backend-event-hub:${TAG_BACKEND:-latest}
     build:
       context: .
       dockerfile: backend/Dockerfile
@@ -31,15 +32,13 @@ services:
       - "${BACKEND_PORT:-3000}:${BACKEND_PORT:-3000}"
     env_file:
       - .env
-    environment:
-      DATABASE_URL: ${DATABASE_URL:-postgres://postgres:postgres@db:5432/app}
     depends_on:
       db:
         condition: service_healthy
 
   frontend:
     container_name: frontend
-    image: frontend-event-hub:${TAG_FRONTEND}
+    image: frontend-event-hub:${TAG_FRONTEND:-latest}
     build:
       context: .
       dockerfile: frontend/Dockerfile
@@ -47,8 +46,6 @@ services:
       - "${FRONTEND_PORT:-4173}:4173"
     env_file:
       - .env
-    environment:
-      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:3000}
     depends_on:
       - backend
 
