@@ -1,0 +1,10 @@
+
+> server@1.0.1 start
+> prisma migrate deploy && node dist/server.mjs
+
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "app", schema "public" at "db-service.database.svc.cluster.local:5432"
+
+Error: P1001: Can't reach database server at `db-service.database.svc.cluster.local:5432`
+
+Please make sure your database server is running at `db-service.database.svc.cluster.local:5432`.
