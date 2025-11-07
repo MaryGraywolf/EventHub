@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: frontend-event-hub:v0.0.1
+        image: frontend-event-hub:${TAG_FRONTEND}
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4173

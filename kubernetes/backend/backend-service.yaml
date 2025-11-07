@@ -10,8 +10,8 @@ spec:
   selector:
     app: backend
   ports:
-  - port: 3000
-    targetPort: 3000
+  - port: ${BACKEND_PORT}
+    targetPort: ${BACKEND_PORT}
     nodePort: 30081
     protocol: TCP
     name: http

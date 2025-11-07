@@ -6,7 +6,7 @@ FROM base AS dependencies
 
 WORKDIR /usr/src/app
 
-COPY frontend/package.json frontend/package-lock.json ./
+COPY package.json package-lock.json ./
 
 RUN npm install
 
@@ -15,9 +15,7 @@ FROM dependencies AS build
 
 WORKDIR /usr/src/app
 
-COPY .env ./
-
-COPY frontend/. .
+COPY . .
 
 RUN npm run build
 

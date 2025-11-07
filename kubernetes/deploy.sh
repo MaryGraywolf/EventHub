@@ -2,6 +2,14 @@
 
 set -e
 
+if [ -f "../.env" ]; then
+    echo "Loading environment variables from .env file..."
+    export $(grep -v '^#' ../.env | xargs)
+else
+    echo "Warning: .env file not found!"
+    exit 1
+fi
+
 echo "======================================"
 echo "EventHub Kubernetes Deployment Script"
 echo "======================================"
@@ -16,11 +24,18 @@ else
 fi
 echo ""
 
+echo "Building Docker images..."
+echo "- Building backend image..."
+docker build -t backend-event-hub:${TAG_BACKEND} ../backend
+echo "- Building frontend image..."
+docker build -t frontend-event-hub:${TAG_FRONTEND} ../frontend
+echo ""
+
 echo "Loading Docker images into Kind cluster..."
-echo "- Loading backend-event-hub:v0.0.1..."
-kind load docker-image backend-event-hub:v0.0.1 --name eventhub
-echo "- Loading frontend-event-hub:v0.0.1..."
-kind load docker-image frontend-event-hub:v0.0.1 --name eventhub
+echo "- Loading backend-event-hub:${TAG_BACKEND}..."
+kind load docker-image backend-event-hub:${TAG_BACKEND} --name eventhub
+echo "- Loading frontend-event-hub:${TAG_FRONTEND}..."
+kind load docker-image frontend-event-hub:${TAG_FRONTEND} --name eventhub
 echo ""
 
 echo "1. Creating namespaces..."
@@ -30,27 +45,27 @@ echo ""
 echo "2. Deploying Database..."
 kubectl apply -f database/database-pv.yaml
 kubectl apply -f database/database-pvc.yaml
-kubectl apply -f database/database-configmap.yaml
-kubectl apply -f database/database-secret.yaml
-kubectl apply -f database/database-deployment.yaml
-kubectl apply -f database/database-service.yaml
+envsubst < database/database-configmap.yaml | kubectl apply -f -
+envsubst < database/database-secret.yaml | kubectl apply -f -
+envsubst < database/database-deployment.yaml | kubectl apply -f -
+envsubst < database/database-service.yaml | kubectl apply -f -
 echo "Waiting for database to be ready..."
 kubectl wait --for=condition=available --timeout=120s deployment/database-deployment -n database
 echo ""
 
 echo "3. Deploying Backend..."
-kubectl apply -f backend/backend-configmap.yaml
-kubectl apply -f backend/backend-secret.yaml
-kubectl apply -f backend/backend-deployment.yaml
-kubectl apply -f backend/backend-service.yaml
+envsubst < backend/backend-configmap.yaml | kubectl apply -f -
+envsubst < backend/backend-secret.yaml | kubectl apply -f -
+envsubst < backend/backend-deployment.yaml | kubectl apply -f -
+envsubst < backend/backend-service.yaml | kubectl apply -f -
 echo "Waiting for backend to be ready..."
 kubectl wait --for=condition=available --timeout=120s deployment/backend-deployment -n backend
 echo ""
 
 echo "4. Deploying Frontend..."
-kubectl apply -f frontend/frontend-configmap.yaml
-kubectl apply -f frontend/frontend-deployment.yaml
-kubectl apply -f frontend/frontend-service.yaml
+envsubst < frontend/frontend-configmap.yaml | kubectl apply -f -
+envsubst < frontend/frontend-deployment.yaml | kubectl apply -f -
+envsubst < frontend/frontend-service.yaml | kubectl apply -f -
 echo "Waiting for frontend to be ready..."
 kubectl wait --for=condition=available --timeout=120s deployment/frontend-deployment -n frontend
 echo ""
