@@ -6,7 +6,7 @@ FROM base AS dependencies
 
 WORKDIR /usr/src/app
 
-COPY backend/package.json backend/package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 
 RUN npm install
 
@@ -15,7 +15,9 @@ FROM dependencies AS build
 
 WORKDIR /usr/src/app
 
-COPY backend/. .
+COPY .env ./
+
+COPY frontend/. .
 
 RUN npm run build
 
@@ -24,15 +26,10 @@ FROM base AS deploy
 
 WORKDIR /usr/src/app
 
-RUN npm install -g prisma
-
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package.json ./package.json
-COPY --from=build /usr/src/app/prisma ./prisma
 
-RUN npx prisma generate
+EXPOSE 4173
 
-EXPOSE ${BACKEND_PORT:-3000}
-
-CMD ["npm", "start"]
+CMD ["npm", "run", "preview", "--", "--host"]
