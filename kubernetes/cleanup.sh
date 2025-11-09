@@ -16,29 +16,7 @@ else
 fi
 echo ""
 
-echo "1. Deleting Frontend..."
-kubectl delete -f frontend/frontend-service.yaml --ignore-not-found=true
-kubectl delete -f frontend/frontend-deployment.yaml --ignore-not-found=true
-kubectl delete -f frontend/frontend-configmap.yaml --ignore-not-found=true
-echo ""
-
-echo "2. Deleting Backend..."
-kubectl delete -f backend/backend-service.yaml --ignore-not-found=true
-kubectl delete -f backend/backend-deployment.yaml --ignore-not-found=true
-kubectl delete -f backend/backend-secret.yaml --ignore-not-found=true
-kubectl delete -f backend/backend-configmap.yaml --ignore-not-found=true
-echo ""
-
-echo "3. Deleting Database..."
-kubectl delete -f database/database-service.yaml --ignore-not-found=true
-kubectl delete -f database/database-deployment.yaml --ignore-not-found=true
-kubectl delete -f database/database-secret.yaml --ignore-not-found=true
-kubectl delete -f database/database-configmap.yaml --ignore-not-found=true
-kubectl delete -f database/database-pvc.yaml --ignore-not-found=true
-kubectl delete -f database/database-pv.yaml --ignore-not-found=true
-echo ""
-
-echo "4. Deleting namespaces..."
+echo "1. Deleting namespaces..."
 kubectl delete -f namespaces/ --ignore-not-found=true
 echo ""
 
