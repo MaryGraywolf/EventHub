@@ -1,0 +1,15 @@
+
+> server@1.0.1 start
+> prisma migrate deploy && node dist/server.mjs
+
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "app", schema "public" at "db-service.database.svc.cluster.local:5432"
+
+1 migration found in prisma/migrations
+
+
+No pending migrations to apply.
+Server is running at http://127.0.0.1:30081
+Swagger docs available at http://127.0.0.1:30081/docs
+Prometheus metrics available at http://127.0.0.1:30081/metrics
+Custom metrics available at http://127.0.0.1:30081/prometheus-metrics

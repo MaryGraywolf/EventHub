@@ -1,17 +1,63 @@
 # EventHub
 
-Aplicação web para gerenciamento de eventos, desenvolvida com arquitetura de microsserviços utilizando Docker.
+Aplicação web para **gerenciamento de eventos**, implantada com **cluster Kubernetes** para nota do trabalho II de containerização e orquestração.
 
-## Arquitetura
+---
 
-![Diagrama de Arquitetura](./assets/diagram.png)
+## 🧭 Arquitetura
 
-A aplicação é composta por três containers Docker que se comunicam através de uma rede interna:
-- **Frontend Container**: Interface do usuário (Vite + React) na porta 4173
-- **Backend Container**: API REST (Node.js + Fastify) na porta 3000
-- **DB Container**: Banco de dados PostgreSQL na porta 5432 com volume persistente
+O sistema é composto por três namespaces independentes — **frontend**, **backend** e **database** — que se comunicam internamente dentro do cluster.
 
-## Tecnologias
+![Diagrama de Arquitetura](./assets/diagrama_kubernetes.jpeg)
+
+Cada namespace possui seu próprio **Deployment**, **Service**, **ConfigMap** e **Secret**, promovendo isolamento, escalabilidade e segurança.
+
+---
+
+### 🖥️ Namespace: `frontend`
+
+Responsável pela **interface de usuário** construída com **React + Vite**.
+
+- **Deployment:** executa 3 réplicas (Pods) da aplicação React.
+- **Service (NodePort):** expõe a aplicação na porta externa `30080`, mapeando para a porta interna `4173`.
+- **ConfigMap (`frontend-config`):** contém variáveis de ambiente e configurações do frontend.
+
+📍 **Acesso externo:**
+`http://<NODE_IP>:30080`
+
+---
+
+### ⚙️ Namespace: `backend`
+
+Responsável pela **API REST** desenvolvida com **Node.js + Fastify**, atuando como intermediário entre o frontend e o banco de dados.
+
+- **Deployment:** executa 2 réplicas (Pods) da API.
+- **Service (NodePort):** expõe a API na porta externa `30081`, mapeando para a porta interna `3000`.
+- **ConfigMap (`backend-config`):** define variáveis de ambiente.
+- **Secret (`backend-secret`):** armazena credenciais sensíveis (ex: conexão com o banco de dados).
+
+📍 **Acesso interno:**
+`http://backend-service.backend.svc.cluster.local:3000`
+
+---
+
+### 🗄️ Namespace: `database`
+
+Responsável pelo banco de dados **PostgreSQL 15**, com armazenamento persistente.
+
+- **Deployment:** executa 1 Pod do PostgreSQL.
+- **Service (ClusterIP):** permite comunicação interna com o backend na porta `5432`.
+- **ConfigMap (`database-config`):** define parâmetros de inicialização.
+- **Secret (`database-secret`):** armazena usuário e senha do banco.
+- **PersistentVolumeClaim (`database-pvc`):** solicita armazenamento persistente.
+- **PersistentVolume (`database-pv`):** volume de **1 GiB** que garante persistência dos dados.
+
+📍 **Acesso interno:**
+`postgres://<user>:<password>@database-service.database.svc.cluster.local:5432/eventhub`
+
+---
+
+## 🧩 Tecnologias Utilizadas
 
 ### Backend
 - Node.js 20+
@@ -29,45 +75,39 @@ A aplicação é composta por três containers Docker que se comunicam através 
 - TypeScript
 
 ### Infraestrutura
-- Docker & Docker Compose
+- Kubernetes
+- ConfigMaps & Secrets
+- Deployments & Services
+- Persistent Volumes (PV/PVC)
 
-## Pré-requisitos
+---
 
-- [Docker](https://docs.docker.com/get-docker/) e [Docker Compose](https://docs.docker.com/compose/install/) instalados
+## ⚙️ Pré-requisitos
 
-## Como Executar
+- Cluster **Kubernetes** configurado (local ou cloud)
+- **kubectl** e **helm** instalados e configurados
+- Imagens do **frontend**, **backend** e **database** publicadas em um registro (ex: Docker Hub)
+
+---
+
+## 🚀 Como Implantar
 
 1. Clone o repositório:
    ```bash
    git clone <URL_DO_REPOSITORIO>
    cd EventHub
-   ```
 
-2. Configure as variáveis de ambiente:
+2. Implante os recursos necessários:
    ```bash
-   cp .env.example .env
-   ```
+   cd kubernetes
+   bash ./deploy.sh
 
-3. Inicie a aplicação:
+4. Verifique os recursos implantados:
    ```bash
-   docker compose up --build
-   ```
+   kubectl get pods -A
+   kubectl get svc -A
 
-4. Acesse a aplicação:
-   - **Frontend**: http://localhost:4173
-   - **Backend**: http://localhost:3000
-   - **API Docs**: http://localhost:3000/docs
-
-## Estrutura
-
-```
-EventHub/
-├── backend/          # API REST com Fastify + Prisma
-├── frontend/         # Interface React + Vite
-├── docker-compose.yml
-└── .env
-```
-
-## Licença
-
-MIT License
+5. Acesse a aplicação:
+- Frontend: http://<NODE_IP>:30080
+- Backend: http://<NODE_IP>:30081
+- Banco: acesso interno via ClusterIP

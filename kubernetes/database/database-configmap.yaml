@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-config
+  namespace: database
+data:
+  POSTGRES_USER: "${DB_USER}"
+  POSTGRES_DB: "${DB_NAME}"
+  PGPORT: "5432"
