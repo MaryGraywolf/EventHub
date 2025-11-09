@@ -26,9 +26,9 @@ echo ""
 
 echo "Building Docker images..."
 echo "- Building backend image..."
-docker build -t backend-event-hub:v0.0.1 -f ../backend/Dockerfile ../.
+docker build -t backend-event-hub:${TAG_BACKEND} -f ../backend/Dockerfile ../.
 echo "- Building frontend image..."
-docker build -t frontend-event-hub:v0.0.1 -f ../frontend/Dockerfile ../.
+docker build -t frontend-event-hub:${TAG_FRONTEND} -f ../frontend/Dockerfile ../.
 echo ""
 
 echo "Loading Docker images into Kind cluster..."
