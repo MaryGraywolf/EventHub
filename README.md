@@ -1,6 +1,6 @@
 # EventHub
 
-Aplicação web para **gerenciamento de eventos**, desenvolvida com **arquitetura de microsserviços** implantada em um **cluster Kubernetes**.
+Aplicação web para **gerenciamento de eventos**, implantada com **cluster Kubernetes** para nota do trabalho II de containerização e orquestração.
 
 ---
 
