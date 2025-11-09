@@ -16,6 +16,13 @@ else
 fi
 echo ""
 
+echo "Building Docker images..."
+echo "- Building backend image..."
+docker build -t backend-event-hub:v0.0.1 -f ../backend/Dockerfile ../.
+echo "- Building frontend image..."
+docker build -t frontend-event-hub:v0.0.1 -f ../frontend/Dockerfile ../.
+echo ""
+
 echo "Loading Docker images into Kind cluster..."
 echo "- Loading backend-event-hub:v0.0.1..."
 kind load docker-image backend-event-hub:v0.0.1 --name eventhub
