@@ -24,18 +24,32 @@ else
 fi
 echo ""
 
-echo "Building Docker images..."
-echo "- Building backend image..."
-docker build -t backend-event-hub:${TAG_BACKEND} -f ../backend/Dockerfile ../.
-echo "- Building frontend image..."
-docker build -t frontend-event-hub:${TAG_FRONTEND} -f ../frontend/Dockerfile ../.
+read -p "Do you want to build Docker images? (y/n): " BUILD_IMAGES
+
+if [[ "$BUILD_IMAGES" =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "Building Docker images..."
+    echo "- Building backend image..."
+    docker build -t backend-event-hub:${TAG_BACKEND} -f ../backend/Dockerfile ../.
+    echo "- Building frontend image..."
+    docker build -t frontend-event-hub:${TAG_FRONTEND} -f ../frontend/Dockerfile ../.
+else
+    echo "Skipping Docker image build."
+fi
 echo ""
 
-echo "Loading Docker images into Kind cluster..."
-echo "- Loading backend-event-hub:${TAG_BACKEND}..."
-kind load docker-image backend-event-hub:${TAG_BACKEND} --name eventhub
-echo "- Loading frontend-event-hub:${TAG_FRONTEND}..."
-kind load docker-image frontend-event-hub:${TAG_FRONTEND} --name eventhub
+read -p "Do you want to load Docker images into Kind cluster? (y/n): " LOAD_IMAGES
+
+if [[ "$LOAD_IMAGES" =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "Loading Docker images into Kind cluster..."
+    echo "- Loading backend-event-hub:${TAG_BACKEND}..."
+    kind load docker-image backend-event-hub:${TAG_BACKEND} --name eventhub
+    echo "- Loading frontend-event-hub:${TAG_FRONTEND}..."
+    kind load docker-image frontend-event-hub:${TAG_FRONTEND} --name eventhub
+else
+    echo "Skipping Docker image loading."
+fi
 echo ""
 
 echo "1. Creating namespaces..."
