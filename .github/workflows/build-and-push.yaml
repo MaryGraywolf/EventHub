@@ -64,13 +64,14 @@ jobs:
           echo "job_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_OUTPUT
 
       - name: Discord Notification
-        uses: appleboy/discord-action@v1
+        uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
           color: FF0000
-          title: 🔴 Falha na Pipeline CI/CD 🔴
+          username: "CI/CD Bot"
           message: |
+            🔴 Falha na Pipeline CI/CD 🔴
             Status do Job: ${{ needs.build.result }}
             Mensagem: ${{ steps.error_info.outputs.error_message }}
             Detalhes: [Ver logs completos aqui](${{ steps.error_info.outputs.job_url }})
