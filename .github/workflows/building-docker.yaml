@@ -1,9 +1,0 @@
-name: Building Docker Image
-on:
-    push:
-        branches:
-            - createWorkflows
-jobs: 
-    build:
-        runs-on: ubuntu-latest
-        
