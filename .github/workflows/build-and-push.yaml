@@ -2,7 +2,7 @@ name: Build and Push Service Images
 on:
   push:
     branches:
-      - main
+      - master
       - createWorkflows
 jobs:
   build:
