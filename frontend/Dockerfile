@@ -15,7 +15,8 @@ FROM dependencies AS build
 
 WORKDIR /usr/src/app
 
-COPY .env ./
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 COPY frontend/. .
 
