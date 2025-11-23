@@ -2,8 +2,8 @@ name: Build and Push Service Images
 on:
   push:
     branches:
-      - master
-      - createWorkflows
+      - main
+      - feature/createWorkflows
 jobs:
   build:
     runs-on: ubuntu-latest
