@@ -28,28 +28,28 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       # 1. BUILD & PUSH DO BACKEND
-      - name: Build and push Backend image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./backend/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-event-hub:${{ github.sha }} 
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # - name: Build and push Backend image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ./backend/Dockerfile
+      #     push: true
+      #     tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-event-hub:${{ github.sha }} 
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
 
-      # 2. BUILD & PUSH DO FRONTEND
-      - name: Build and push Frontend image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./frontend/Dockerfile 
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend-event-hub:${{ github.sha }} 
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            VITE_API_BASE_URL=${{ env.VITE_API_BASE_URL }} # Usa a variável definida no bloco 'env'
+      # # 2. BUILD & PUSH DO FRONTEND
+      # - name: Build and push Frontend image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ./frontend/Dockerfile 
+      #     push: true
+      #     tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend-event-hub:${{ github.sha }} 
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     build-args: |
+      #       VITE_API_BASE_URL=${{ env.VITE_API_BASE_URL }} # Usa a variável definida no bloco 'env'
 
   notify_failure:
     runs-on: ubuntu-latest
