@@ -1,0 +1,52 @@
+stages:
+  - build-and-test
+  - build-and-push
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_MERGE_REQUEST_IID
+
+build-and-test:
+  stage: build-and-test
+  image: node:18
+  script:
+    - cd backend
+    - npm install
+    - npm test
+    - cd ../frontend
+    - npm install
+    - npm test
+
+build-and-push:
+  stage: build-and-push
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  before_script:
+    - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+  script:
+    - docker build -t $DOCKERHUB_USERNAME/pass-in-backend:$CI_COMMIT_SHA -f backend/Dockerfile ./backend
+    - docker push $DOCKERHUB_USERNAME/pass-in-backend:$CI_COMMIT_SHA
+    - docker build -t $DOCKERHUB_USERNAME/pass-in-frontend:$CI_COMMIT_SHA -f frontend/Dockerfile ./frontend
+    - docker push $DOCKERHUB_USERNAME/pass-in-frontend:$CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy:
+  stage: deploy
+  image: google/cloud-sdk:latest
+  script:
+    - echo "$KUBECONFIG" > kubeconfig.yml
+    - export KUBECONFIG=kubeconfig.yml
+    - cd kubernetes
+    - kustomize edit set image backend=$DOCKERHUB_USERNAME/pass-in-backend:$CI_COMMIT_SHA
+    - kustomize edit set image frontend=$DOCKERHUB_USERNAME/pass-in-frontend:$CI_COMMIT_SHA
+    - kustomize build . | kubectl apply -f -
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
